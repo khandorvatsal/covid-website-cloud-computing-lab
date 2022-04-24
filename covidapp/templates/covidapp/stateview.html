@@ -1,0 +1,275 @@
+{% extends 'covidapp/base.html' %}
+
+{% block title %}
+TraCOR - Covid19 in {{sname}}
+{% endblock title %}
+
+
+{% block content %}
+<div class='card' style="background-color:#1d1d1d;margin:12px;padding: 12px;">
+  <strong style="letter-spacing: 1px;font-size: 12px;"><marquee onmouseover="stop()" onmouseout="start()">
+   Boycott Chinese products. Support local indian businesses. #VocalForLocal
+  </marquee>
+  </strong>
+</div> 
+<div class="container">
+<p class="animated animatedFadeInUp fadeInUp " style="font-weight: bold;padding: 15px;animation-delay: 0.3s;text-align: center;font-size: 15px;"><i class="fa fa-calendar" style="padding: 10px;"></i>{{d}}</p>
+<div  style="text-align: center;margin-bottom: 30px;">
+  
+    <h5 class="kit animated animatedFadeInUp fadeInUp" style="color: white;animation-delay: 0.4s;" ><i class="fa fa-viruses" style="padding: 10px;color: rgb(194, 52, 52);" ></i>COVID19 IN <span style="color: palegreen;font-weight: bold;text-transform: uppercase;">{{sname}}</span></h4><br><br>
+    <div class="row">
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.5s;">
+             <h5 class="kit" class="kit" style="font-weight: bold;color: rgb(102, 102, 255);">{{s.confirmed}}</h4>
+             <p><span class="counter" style="color: rgb(134, 134, 252);font-size: 15px; ">+[{{s.deltaconfirmed}}]</span></p><br>
+             <p style="font-weight: bold;font-size: 15px;color: rgb(102, 102, 255);">Cases</p>
+        </div>
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.6s;">
+            <h5 class="kit"  style="font-weight: bold;color:yellow ;">{{s.active}}</h5>
+            <p><span  style="color: rgb(255, 255, 137);font-size: 15px; "><i class="fa fa-heart" aria-hidden="true" style="padding: 5px;"></i></span></p><br>
+            <p style="font-weight: bold;color: yellow;font-size: 15px;">Active</p>
+        </div>
+
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.7s;">
+            <h5 class="kit"  style="font-weight: bold;color:red ;">{{s.deaths}}</h5 >
+            <p><span  style="color: rgb(255, 77, 77);font-size: 15px; ">{% if s.deltadeaths %}+[{{s.deltadeaths}}]{% endif %}</span></p><br>
+            <p style="font-weight: bold;color: red;font-size: 15px;">Deaths</p>
+        </div>
+
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.8s;">
+            <h5 class="kit"  style="font-weight: bold;color:green ;">{{s.recovered}}</h5>
+            <p><span  style="color: rgb(113, 252, 113);font-size: 15px; ">{% if s.deltarecovered %}+[{{s.deltarecovered}}]{% endif %}</span></p><br>
+            <p style="font-weight: bold;color: green;font-size: 15px;">Cured</p>
+        </div>
+</div><br><br>
+    <p class="animated animatedFadeInUp fadeInUp text-muted" style="text-align: center;animation-delay: 1s;font-weight: bold;">Last Updated : {{s.lastupdatedtime}}</p>
+
+</div>
+</div><br>
+<div class="container">
+<div class="row" >
+  <div class="container col-12 col-md-offset-3 col-md-4 animated animatedFadeInUp fadeInUp" style="animation-delay:1.4s;"><canvas class='new_card' height="275px" id="line-chart-confirmed" style="margin-bottom: 40px;padding: 15px; background-color: rgba(93, 93, 255, 0.15);border:0px" ></canvas></div>
+  <div class="container col-12 col-md-offset-3 col-md-4 animated animatedFadeInUp fadeInUp" style="animation-delay:1.6s;"><canvas class="new_card" height="275px"  id="line-chart-deaths" style="margin-bottom: 40px;padding: 15px;background-color:rgb(255, 0, 0, 0.15);border:0px" ></canvas></div><br><br>
+  <div class="container col-12 col-md-offset-3 col-md-4 animated animatedFadeInUp fadeInUp" style="animation-delay:1.8s;"><canvas class=' new_card' height="275px" id="line-chart-recovered" style="margin-bottom: 40px;padding: 15px;border:0px; background-color: rgb(0, 128, 0, 0.2);"></canvas></div>
+</div> 
+</div> 
+  <div style='color:rgb(0, 128, 0)'></div>
+<div>
+    <div class="container" style="margin-top: 50px;">
+      <h5 class="kit animated animatedFadeInUp fadeInUp"   style="font-weight: bold;animation-delay: 1.2s;">District</h5><br>
+      <div class="table-wrapper-scroll-y my-custom-scrollbar animated animatedFadeInUp fadeInUp">        
+      <table class="animated animatedFadeInUp fadeInUp" style="animation-delay: 1.4s;">
+                <tr>
+                  <th style="text-align: left;" class=''>District</th>
+                  <th >Zone</th>
+                  <th  style='color:rgba(93, 93, 255, 0.801)'>Confirmed</th>
+                  <th  style='color:red'>Deaths</th>
+                  <th style='color:green'>Recovered</th>
+                  
+                </tr>
+                 
+                {% for key,value in dis.items %}               
+                <tr>
+                  <td><p style="text-align: left;">
+                  <a href="/india/{{sname}}/{{key}}/">{{key}}</a>
+                  </p>
+                  </td>
+                  <td><p style='color:{{value.zone}}'>{{value.zone}}</p></td>
+                  <td><p ><span style='color:rgba(93, 93, 255, 0.801)'>{% if value.delta.confirmed != 0 %}+{{value.delta.confirmed}}{% endif %}</span> {{value.confirmed}}</p></td>
+                  <td><p ><span style='color:red'>{% if value.delta.deceased != 0 %}+{{value.delta.deceased}}{% endif %}</span> {{value.deceased}}</p></td>
+                  <td><p><span style='color:green'>{% if value.delta.recovered != 0 %}+{{value.delta.recovered}}{% endif %}</span> {{value.recovered}}</p></td>
+                </tr>
+                
+                {% endfor %}
+      </table>
+      </div>      
+    </div>
+</div>   
+{% endblock content %}
+
+{% block style %}
+<style>
+.my-custom-scrollbar {
+  position: relative;
+  height: 440px;
+  overflow: auto;
+  animation-delay: 1.4s
+  }
+  .table-wrapper-scroll-y {
+  display: block;
+  }
+</style> 
+{% endblock style %}
+
+{% block script %}
+<script> 
+
+  var ctx = document.getElementById('line-chart-deaths').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                {% for x in state_timeline %}
+                  {% if x.status == 'Deceased' %}
+                  "{{x.date}}",
+                  {% endif %}
+                  {% endfor %}      
+                         ],
+               
+                datasets: [{
+                    
+                    label: 'Per day deaths' ,   
+                    data: [ {% for x in deceased %}
+                  "{{x}}",
+                {% endfor %}],                  
+                    backgroundColor: 'rgb(255, 0, 0, 0.15)',
+                        
+                  
+                    borderColor: 
+                        'red',
+                 
+                    borderWidth: 1
+                }]
+            },
+            options: {
+              title: {
+                        display: true,
+                        text: 'Rise in Deaths in {{sname}}'
+                      },
+                scales: {
+                    xAxes: [{
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                          
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                          
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }]
+                }
+            }
+        });
+
+        
+
+        var ctx = document.getElementById('line-chart-confirmed').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                {% for x in state_timeline %}
+                  {% if x.status == 'Confirmed' %}
+                  "{{x.date}}",
+                  {% endif %}
+                  {% endfor %}       
+                         ],
+               
+                datasets: [{
+                    
+                    label: 'Per day confirmed cases' ,
+
+                    data: [{% for x in confirmed %}
+                  '{{x}}',
+                {% endfor %}],                  
+                    backgroundColor: 'rgba(93, 93, 255, 0.15)',
+                        
+                  
+                    borderColor: 'rgba(93, 93, 255, 0.9)',
+                 
+                    borderWidth: 1
+                }]
+            },
+            options: {
+              title: {
+                        display: true,
+                        text: 'Rise in Confirmed Cases in {{sname}}'
+                      },
+                scales: {
+                    xAxes: [{ 
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                         
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        tickMarkLength: 19
+                      }
+                    }]
+                }
+            }
+        });
+
+
+  var ctx = document.getElementById('line-chart-recovered').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: [
+          {% for x in state_timeline %}
+            {% if x.status == 'Recovered' %}
+            "{{x.date}}",
+            {% endif %}
+            {% endfor %}      
+                    ],
+          
+          datasets: [{
+              
+              label: 'Per day recovered' ,   
+              data: [ {% for x in recovered %}
+            "{{x}}",
+          {% endfor %}],                  
+              backgroundColor: 'rgb(0, 128, 0, 0.2)',
+                  
+            
+              borderColor: 
+                  'green',
+            
+              borderWidth: 1
+          }]
+      },
+      options: {
+        title: {
+                  display: true,
+                  text: 'Rise in Recoveries in {{sname}}'
+                },
+          scales: {
+              xAxes: [{
+                gridLines:{
+                  display:false,
+                  // ticks: {
+                    
+                      tickMarkLength: 19
+                  //}
+                }
+              }],
+              yAxes: [{
+                gridLines:{
+                  display:false,
+                  // ticks: {
+                    
+                      tickMarkLength: 19
+                  //}
+                }
+              }]
+          }
+      }
+  });
+
+        
+
+
+</script>
+{% endblock script %}

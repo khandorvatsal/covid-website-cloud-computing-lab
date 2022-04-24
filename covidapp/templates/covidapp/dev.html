@@ -1,0 +1,50 @@
+{% extends 'covidapp/base.html' %}
+
+
+{% block title %}
+TraCOR - Paisa hi paisa hoga
+{% endblock title %}
+
+{% block style %}
+<style>
+  .form-control:focus {
+  box-shadow: none;
+}
+
+.form-control-underlined {
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-radius: 0;
+  padding-left: 0;
+}
+</style>
+{% endblock style %}
+{% block content %}
+<div class="container" style="text-align: center;"><br>
+  <h5 style="color: rgb(255, 37, 37);font-weight: bold;">You have discovered a secret page!!</h5><br>
+  <h6 style="color: aqua;font-weight: bold;">We have a reward for u...</h6><br>
+  <button class="btn-primary btn-success" onclick="reward()">Click here to claim reward</button>
+<br>
+
+<center><form action="" style="margin-top: 40px;">
+  <div class="p-1 bg-dark  shadow-sm md-4" style="border-radius: 20px;width:300px;">
+    <div class="input-group">
+      <input type="search" placeholder="What're you searching for?" aria-describedby="button-addon1" class="form-control border-0 bg-dark">
+      <div class="input-group-append">
+        <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search" style="color: white;"></i></button>
+      </div>
+    </div>
+  </div>
+  </form></center>
+</div>
+
+
+
+{% endblock content %}
+{% block script %}
+<script>
+  function reward(){
+    alert("Lauda lo, lauda lo na mera!!");
+  }
+</script>
+{% endblock script %}

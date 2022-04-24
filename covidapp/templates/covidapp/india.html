@@ -1,0 +1,275 @@
+{% extends 'covidapp/base.html' %}
+
+
+{% block title %}
+TraCOR - Covid19 in India
+{% endblock title %}
+
+
+{% block content %}
+<div class='card' style="background-color:rgb(31, 31, 31);margin:12px;padding: 12px;">
+  <strong style="letter-spacing: 1px;font-size: 12px;"><marquee onmouseover="stop()" onmouseout="start()">
+   Boycott Chinese products. Support local indian businesses. #VocalForLocal
+  </marquee>
+  </strong>
+  </div>
+<div class="container">
+<p class="animated animatedFadeInUp fadeInUp " style="font-weight: bold;font-size: 15px;padding: 15px;animation-delay: 0.3s;text-align: center;"><i class="fa fa-calendar" style="padding: 10px;"></i>{{d}}</p>
+  <div style="text-align: center;">
+    <h5 style="color: white;animation-delay: 0.6s;" class="kit animated animatedFadeInUp fadeInUp"><i class="fa fa-viruses" style="padding: 10px;color: rgb(194, 52, 52);" ></i>COVID19 IN <span style="color: rgb(67, 67, 255);font-weight: bold;">INDIA</span></h5><br><br>
+    <div class="row">
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.9s;">
+             <h5 class="kit" style="font-weight: bold;color: rgba(93, 93, 255, 0.801);">{{india_total.confirmed}}</h5>
+             <p><span class="counter" style="font-size: 15px;color:  rgb(160, 160, 253); ">{% if india_total.deltaconfirmed %}+[{{india_total.deltaconfirmed}}]{% endif %}</span></p><br>
+             <p style="font-weight: bold;color: rgba(93, 93, 255, 0.801);font-size: 15px;">Cases</p>
+        </div>
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.2s;">
+            <h5 class="kit" style="font-weight: bold;color:yellow ;">{{india_total.active}}</h5>
+            <p><span  style="color: rgb(255, 255, 146);font-size: 10px; "><i class="fa fa-heart" aria-hidden="true" style="padding: 5px;"></i></span></p><br>
+            <p style="font-weight: bold;color: yellow;font-size: 15px;">Active</p>
+        </div>
+
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.5s;">
+            <h5 class="kit" style="font-weight: bold;color:red ;">{{india_total.deaths}}</h5>
+            <p><span  style="color: rgb(255, 77, 77);font-size: 15px; ">{% if india_total.deltadeaths %}+[{{india_total.deltadeaths}}]{% endif %}</span></p><br>
+            <p style="font-weight: bold;color: red;font-size: 15px;">Deaths</p>
+        </div>
+
+        <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.8s;">
+            <h5 class="kit"  style="font-weight: bold;color:green ;">{{india_total.recovered}}</h5>
+            <p><span  style="color: rgb(113, 252, 113);font-size: 15px; ">{% if india_total.deltarecovered %}+[{{india_total.deltarecovered}}]{% endif %}</span></p><br>
+            <p style="font-weight: bold;color: green;font-size: 15px;">Cured</p>
+        </div>
+    </div><br>
+    <p class="animated animatedFadeInUp fadeInUp" style="color: red;animation-delay: 1.9s;"><span style="font-weight: bold;">Death rate : </span>{{info.latest_data.calculated.death_rate|floatformat:4}}</p><br>
+    <p class="animated animatedFadeInUp fadeInUp" style="color: green;animation-delay: 2.0s;"><span style="font-weight: bold;">Recovery rate : </span>{{info.latest_data.calculated.recovery_rate|floatformat:4}}</p><br>
+    <p class="animated animatedFadeInUp fadeInUp" style="color: rgb(95, 95, 255);font-weight: bold;animation-delay: 2.1s;">Cases per million : {{info.latest_data.calculated.cases_per_million_population}}</p><br>
+
+    <p class="animated animatedFadeInUp fadeInUp text-muted" style="animation-delay:2.2s;font-weight: bold;">Last updated on: {{india_total.lastupdatedtime}}</p>
+
+
+</div><br><br>
+<div class="row" >
+<div class="container col-12 col-md-offset-3 col-md-4 animated animatedFadeInUp fadeInUp" style="animation-delay:2.4s;"><canvas class=' new_card' height="275px" id="line-chart-total" style="margin-bottom: 40px;padding: 15px;border:0px"></canvas></div>
+<div class="container col-12 col-md-offset-3 col-md-4 animated animatedFadeInUp fadeInUp" style="animation-delay:2.6s;"><canvas class='new_card' height="275px" id="line-chart-confirmed" style="margin-bottom: 40px;padding: 15px; background-color: rgba(93, 93, 255, 0.15);border:0px" ></canvas></div>
+<div class="container col-12 col-md-offset-3 col-md-4 animated animatedFadeInUp fadeInUp" style="animation-delay:2.8s;"><canvas class="new_card" height="275px"  id="line-chart-deaths" style="margin-bottom: 40px;padding: 15px;background-color:rgb(255, 0, 0, 0.15);border:0px" ></canvas></div><br><br>
+</div> 
+<div style='color:rgb(0, 128, 0)'></div>
+
+
+
+<div>
+<div class="" style="margin-top: 50px;">
+  <h5 class="animated animatedFadeInUp fadeInUp"  style="font-weight: bold;animation-delay: 2.9s;">States</h5>
+  <div class=''>
+  <table class="animated animatedFadeInUp fadeInUp" style="animation-delay: 1.4s;">
+            <tr >
+              <th style="text-align: left;" class='sticky-top'>State</th>
+              <th class='sticky-top' style="color:rgba(93, 93, 255, 0.801)">Confirmed</th>
+              <th class='sticky-top 'style="color:red">Deaths</th>
+              <th class='sticky-top' style="color:green">Recovered</th>
+              
+            </tr>
+             
+            {% for i in india %}
+            
+            <tr>
+              <td><a href="/india/{{i.state}}/{{i.statecode}}"><p style="text-align: left;">{{i.state}}</p></a></td>
+              <td><p ><span style='color: rgba(93, 93, 255, 0.801);'>+ {{i.deltaconfirmed}}</span> {{i.confirmed}}</p></td>
+              <td><p ><span style="color: red;">+ {{i.deltadeaths}}</span> {{i.deaths}}</p></td>
+              <td><p><span style="color: green;">+ {{i.deltarecovered}}</span> {{i.recovered}}</p></td>
+            </tr>
+            
+            {% endfor %}
+  </table>
+  </div>
+</div>
+</div>
+        
+
+</div><br>
+
+{% endblock content %}
+
+
+
+{% block script %}
+<script> 
+  new Chart(document.getElementById("line-chart-total"), {
+    type: 'line',
+    data: {
+      labels: [{% for key,value in daywise.items %}
+                  
+                  "{{key}}",
+                  
+                  {% endfor %}       ],
+      datasets: [{ 
+          data: [{% for key,value in daywise.items %}
+                  "{{value.totalconfirmed}}",
+                {% endfor %}                      ],
+          label: "Total cases",
+          borderColor: "rgba(93, 93, 255, 0.9)",
+          backgroundColor:'rgba(93, 93, 255, 0.15)',
+          borderWidth: 1.5
+        },{ 
+          data: [{% for key,value in daywise.items %}
+                  "{{value.totalrecovered}}",
+                {% endfor %}                      ],
+          label: "Total Cured",
+          borderColor: "green",
+          backgroundColor:'rgb(0, 128, 0, 0.2)',
+          borderWidth: 1.5
+          
+        },{ 
+          data: [{% for key,value in daywise.items %}
+                  "{{value.totaldeceased}}",
+                {% endfor %}                      ],
+          label: "Total Deaths",
+          borderColor: "red",
+          backgroundColor:'rgb(255, 0, 0, 0.2)',
+          borderWidth: 1.5
+        }
+        ],
+        
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Rise in All types of cases in India'
+      },
+      scales: {
+                    xAxes: [{ 
+                      gridLines:{
+                        display:false,
+                        
+                         
+                            tickMarkLength: 19
+                       
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        tickMarkLength: 19
+                      }
+                    }]
+                }
+               
+    }
+  });
+
+
+  var ctx = document.getElementById('line-chart-deaths').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                {% for key,value in daywise.items %}
+                  
+                  "{{key}}",
+                  
+                  {% endfor %}      
+                         ],
+               
+                datasets: [{
+                    
+                    label: 'Per day deaths' ,
+                   // backgroundColor:'red',
+                    //barThickness : 180,   
+                    data: [{% for key,value in daywise.items %}
+                  {{value.dailydeceased}},
+                {% endfor %}],                  
+                    backgroundColor: 'rgb(255, 0, 0, 0.15)',
+                        
+                  
+                    borderColor: 
+                        'red',
+                 
+                    borderWidth: 1
+                }]
+            },
+            options: {
+              title: {
+                        display: true,
+                        text: 'Rise in Deaths in India'
+                      },
+                scales: {
+                    xAxes: [{
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                          
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                          
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }]
+                }
+            }
+        });
+
+        
+
+        var ctx = document.getElementById('line-chart-confirmed').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                {% for key,value in daywise.items %}
+                  
+                  "{{key}}",
+                  
+                  {% endfor %}      
+                         ],
+               
+                datasets: [{
+                    
+                    label: 'Per day confirmed cases' ,
+                   // backgroundColor:'red',
+                    //barThickness : 180,   
+                    data: [{% for key,value in daywise.items %}
+                  {{value.dailyconfirmed}},
+                {% endfor %}],                  
+                    backgroundColor: 'rgba(93, 93, 255, 0.15)',
+                        
+                  
+                    borderColor: 'rgba(93, 93, 255, 0.9)',
+                 
+                    borderWidth: 1
+                }]
+            },
+            options: {
+              title: {
+                        display: true,
+                        text: 'Rise in Confirmed Cases in India'
+                      },
+                scales: {
+                    xAxes: [{ 
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                         
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        tickMarkLength: 19
+                      }
+                    }]
+                }
+            }
+        });
+
+</script>
+{% endblock script %}

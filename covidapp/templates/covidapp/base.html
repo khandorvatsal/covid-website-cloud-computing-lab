@@ -1,0 +1,350 @@
+{% load static %}
+
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- TraCORLogo -->
+        <link rel = "icon" href =  '{% static "covidapp/logo.png" %}'  type = "image/x-icon"> 
+
+        <!-- Map cdn -->
+          <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
+          <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+        <!--  -->
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168136259-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-168136259-1');
+        </script>
+        <!---->
+        
+        <!-- Google Adsense -->
+        <script data-ad-client="ca-pub-1891679618996777" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- -->
+      
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <!-- jQuery library -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- Latest compiled JavaScript -->
+      <!-- Latest compiled and minified CSS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    
+
+
+
+
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+
+
+
+<script>
+  Chart.defaults.global.defaultFontFamily = "Archia Regular";
+  Chart.defaults.global.defaultFontSize = 12;
+  Chart.defaults.global.defaultFontColor = 'lightgray'; 
+  </script>    
+
+
+
+
+
+  <style>
+
+
+
+html { font-size: 1rem;}
+@media (min-width: 200px){
+  .kit{ font-size: 1.15rem; }
+
+}
+@media (min-width: 576px) {
+    .kit{ font-size: 1.3rem; }
+}
+@media (min-width: 768px) {
+    .kit { font-size: 1.5rem; }
+}
+@media (min-width: 992px) {
+    .kit { font-size: 1.5rem; }
+}
+@media (min-width: 1200px) {
+    .kit { font-size: 1.5rem; }
+}
+.new_card{
+    border-radius: 15px;
+    background-color: #1d1d1d;
+  }
+
+@keyframes fadeInUp {
+    from {
+        transform: translate3d(0,40px,0)
+    }
+
+    to {
+        transform: translate3d(0,0,0);
+        opacity: 1
+    }
+}
+
+@-webkit-keyframes fadeInUp {
+    from {
+        transform: translate3d(0,40px,0)
+    }
+
+    to {
+        transform: translate3d(0,0,0);
+        opacity: 1
+    }
+}
+
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: both
+}
+
+.animatedFadeInUp {
+    opacity: 0
+}
+
+.fadeInUp {
+    opacity: 0;
+    animation-name: fadeInUp;
+    -webkit-animation-name: fadeInUp;
+}
+
+
+body{
+  font-family: Archia Regular;
+  background-color: #121212;
+  color:lightgray
+  
+}
+
+
+    
+    
+    
+      .button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+  color: wheat;
+}
+
+table {
+  
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  color:lightgray;
+  padding : 8px;
+  letter-spacing: 0.5px;
+  border-radius:9px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align:right
+}
+th{
+  background-color: rgb(12, 12, 12);
+}
+
+tr:nth-child(even) {
+  color: red;
+  background-color: #1d1d1d;
+  text-align: right;
+}
+tr:nth-child(odd) {
+  color: green;
+  background-color: #121212;
+  text-align: right;
+  
+}
+    
+.my-custom-scrollbar {
+position: relative;
+height: 900px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+
+
+.navbar { background-color: #484848; }
+.navbar .navbar-nav .nav-link { color: #fff; }
+.navbar .navbar-nav .nav-link:hover { color: #fbc531; }
+.navbar .navbar-nav .active > .nav-link { color: #fbc531; }
+
+footer a.text-light:hover { color: #fed136!important; text-decoration: none; }
+footer .cizgi { border-right: 1px solid #535e67; }
+
+
+
+
+@font-face {
+font-family: 'Archia Regular';
+font-style: normal;
+font-weight: normal;
+src: local('Archia Regular'), url('{% static "/covidapp/archia-medium-webfont.woff2" %}') format('woff2');
+}
+
+.new_card{
+    border-radius: 15px;
+    background-color: #1d1d1d;
+    border: 2px solid rgb(139, 139, 139);
+  }
+  </style>
+  {% block style %}
+  {% endblock style %}
+  <title>
+    {% block title %}
+    {% endblock title %}
+  </title>
+    </head>
+
+
+    <body>  
+      <nav class="navbar navbar-exp navbar-dark sticky-top static-top" style="background-color: #1d1d1d;border-bottom: 2px solid rgb(139,139,139);">
+        <div class="container">
+          <a class="navbar-brand" href={% url 'api' %}>
+                <h5 style="padding-top: 10px;font-weight: bold;"><i class="fa fa-snowflake-o" style="margin-right: 8px;padding-top: 4px;color: rgb(192, 21, 21);" ></i>Tra<span style="color:red">COR</span></h5>
+              </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" style="color: white;">
+                <span class="navbar-toggler-icon" style="color: white;"></span>
+              </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item ">
+                <a class="nav-link" href={% url 'api' %}>Home
+                      <span class="sr-only">(current)</span>
+                    </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href={% url 'statewise' %}>India</a>
+              </li>
+              <!--<li class="nav-item">
+                <a class="nav-link" href={% url 'map' %}>Map</a>
+              </li>-->
+              <li class="nav-item">
+                <a class="nav-link" href={% url 'Helpline' %}>Helpline (States)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href={% url 'essentials' %}>Essential Services (Mumbai, Maharashtra)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href={% url 'wiki' %}>Health Advisory</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href={% url 'about' %}>About</a>
+              
+              
+              
+            </ul>
+          </div>
+        </div>
+      </nav>   
+      <!-- <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.5/lib/darkmode-js.min.js"></script>
+      <script>
+
+        var options = {
+          bottom: '64px', // default: '32px'
+          right: 'unset', // default: '32px'
+          left: '32px', // default: 'unset'
+          time: '0.5s', // default: '0.3s'
+          mixColor: '#fff', // default: '#fff'
+          backgroundColor: '#fff',  // default: '#fff'
+          buttonColorDark: '#100f2c',  // default: '#100f2c'
+          buttonColorLight: '#fff', // default: '#fff'
+          saveInCookies: false, // default: true,
+          label: '🌓', // default: ''
+          autoMatchOsTheme: true // default: true
+}
+
+        const darkmode = new Darkmode(options);
+        darkmode.showWidget();
+
+      </script> -->
+      {% block content %}
+      {% endblock content %}
+      <footer class="page-footer font-small cyan darken-3" style="text-align: center;margin-top: 30px;">
+
+        <!-- Footer Elements -->
+        <div class="container" style="background-color: rgb(37, 37, 37);padding-top: 15px;">
+      
+      <div class="row pb-2" >
+        <div class="col-md-6 col-6">
+          <h7 style="color: rgb(41, 198, 209);font-weight: bold;padding: 10px;">Vatsal Khandor</h7><br>
+          <!-- Github -->
+          <a class="tw-ic" href='https://github.com/khandorvatsal'  title="Github">
+            <i class="fab fa-github" style="padding: 10px; color: lightgray;"> </i>
+          </a>
+          <!-- Google +-->
+          <a class="gplus-ic" href='mailto:khandorvatsal@gmail.com'  title="Gmail">
+            <i class="fas fa-envelope" style="padding: 10px;color: rgba(255, 0, 0, 0.623);"> </i>
+          </a>
+          <!--Linkedin -->
+          <a class="li-ic" href='https://www.linkedin.com/in/khandorvatsal/' style="color:#0E76A8"  title="LinkedIn">
+            <i class="fab fa-linkedin-in " style="padding: 10px;"> </i>
+          </a>
+          <!--Instagram-->
+          <a class="ins-ic" href='#' style='color:#DD2A7B'  title="Instagram">
+            <i class="fab fa-instagram " style="padding: 10px;"> </i>
+          </a>
+      </div><br>
+        <div class="col-md-6 col-6">
+          <h7 style="color: rgb(41, 198, 209);font-weight: bold;padding: 10px;">Vaibhav Mehta</h7><br>        
+          <!-- Github -->
+          <a class="tw-ic" href='#' title="Github">
+            <i class="fab fa-github " style="padding: 10px;color: lightgray;"> </i>
+          </a>
+          <!-- Google +-->
+          <a class="gplus-ic" href='mailto:mehtavaibhav3000@gmail.com' title="Gmail">
+            <i class="fas fa-envelope " style="padding: 10px;color: rgba(255, 0, 0, 0.623);"> </i>
+          </a>
+          <!--Linkedin -->
+          <a class="li-ic" href='#' style="color:#0E76A8"  title="LinkedIn">
+            <i class="fab fa-linkedin-in " style="padding: 10px;"> </i>
+          </a>
+          <!--Instagram-->
+          <a class="ins-ic"  href='#' style='color:#DD2A7B' title="Instagram">
+            <i class="fab fa-instagram " style="padding: 10px;"> </i>
+          </a>  
+        </div>
+      </div>
+          <!-- Grid row-->
+         
+            <!-- Grid column -->
+      
+          </div>
+          <!-- Grid row-->
+      
+        
+        <!-- Footer Elements -->
+      
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+          <span>We use data by trusted sources on </span><a href={% url 'api' %}>TraCOR</a><sup>&copy;</sup>
+        </div>
+        <!-- Copyright -->
+      
+      </footer>
+      {% block script %}
+      
+      {% endblock script %}
+    </body>
+</html>

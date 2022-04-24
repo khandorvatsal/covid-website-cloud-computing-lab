@@ -1,0 +1,225 @@
+{% extends 'covidapp/base.html' %}
+
+
+{% block title %}
+TraCOR - Covid19 in {{dname}}
+{% endblock title %}
+
+
+{% block content %}
+<div class='card' style="background-color:rgb(31, 31, 31);margin:12px;padding: 12px;">
+  <strong style="letter-spacing: 1px;font-size: 12px;"><marquee onmouseover="stop()" onmouseout="start()">
+   Boycott Chinese products. Support local indian businesses. #VocalForLocal
+  </marquee>
+  </strong>
+  </div>
+<div class="container">
+    <p class="animated animatedFadeInUp fadeInUp " style="font-weight: bold;padding: 15px;animation-delay: 0.3s;text-align: center;font-size: 15px;"><i class="fa fa-calendar" style="padding: 10px;"></i>{{d}}</p>
+    <div  style="text-align: center;margin-bottom: 30px;">
+      
+        <h5 class="kit animated animatedFadeInUp fadeInUp" style="color: white;animation-delay: 0.4s;" ><i class="fa fa-viruses" style="padding: 10px;color: rgb(194, 52, 52);" ></i>COVID19 IN <span style="color: palegreen;font-weight: bold;text-transform: uppercase;">{{dname}}</span></h4><br><br>
+        <div class="row">
+            <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.5s;">
+                 <h5 class="kit" id="cases" style="font-weight: bold;color: rgb(102, 102, 255);"></h4>
+                 <p><span class="counter" style="color: rgb(134, 134, 252);font-size: 15px; ">+[{{dis.delta.confirmed}}]</span></p><br>
+                 <p style="font-weight: bold;font-size: 15px;color: rgb(102, 102, 255);">Cases</p>
+            </div>
+            <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.6s;">
+                <h5 class="kit" id="active" style="font-weight: bold;color:yellow ;">{{dis.active}}</h5>
+                <p><span  style="color: rgb(255, 255, 137);font-size: 15px; "><i class="fa fa-heart" aria-hidden="true" style="padding: 5px;"></i></span></p><br>
+                <p style="font-weight: bold;color: yellow;font-size: 15px;">Active</p>
+            </div>
+    
+            <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.7s;">
+                <h5 class="kit" id="deaths"  style="font-weight: bold;color:red ;">{{dis.deceased}}</h5 >
+                <p><span  style="color: rgb(255, 77, 77);font-size: 15px; ">{% if dis.delta.deceased %}+[{{dis.delta.deceased}}]{% else %}<i class="fa fa-heart" aria-hidden="true" style="padding: 5px;columns: red;"></i>{% endif %}</span></p><br>
+                <p style="font-weight: bold;color: red;font-size: 15px;">Deaths</p>
+            </div>
+    
+            <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:0.8s;">
+                <h5 class="kit" id="cured" style="font-weight: bold;color:green ;">{{dis.recovered}}</h5>
+                <p><span  style="color: rgb(113, 252, 113);font-size: 15px; ">{% if s.delta.recovered %}+[{{s.delta.recovered}}]{% else %}<i class="fa fa-heart" aria-hidden="true" style="padding: 5px;color: green;"></i>{% endif %}</span></p><br>
+                <p style="font-weight: bold;color: green;font-size: 15px;">Cured</p>
+            </div>
+    </div>
+    
+    </div>
+    <br><br>
+    <div class="row " >
+    <div class="container col-12 col-md-offset-3 col-md-6"><canvas class=' new_card' height="300px" id="line-chart-total" style="margin-bottom: 40px;padding: 15px;border:0px"></canvas></div>
+<br><br>
+    </div>
+    
+{% endblock content %}
+{% block script %}
+<script>
+    var cases = {{dis.confirmed}};
+    cases1 = cases.toLocaleString();
+    document.getElementById("cases").innerHTML= cases1 ;
+    var deaths = {{dis.deceased}};
+    deaths1 = deaths.toLocaleString();
+    document.getElementById("deaths").innerHTML= deaths1 ;
+    var recovered = {{dis.recovered}};
+    recovered1 = recovered.toLocaleString();
+    document.getElementById("cured").innerHTML= recovered1 ;
+    var active = {{dis.active}};
+    active1 = recovered.toLocaleString();
+    document.getElementById("active").innerHTML= active1 ;
+    
+  </script>
+
+    <script> 
+  
+    new Chart(document.getElementById("line-chart-total"), {
+      type: 'bar',
+      data: {
+        labels: [{% for x in district %}
+                    
+                    "{{x.date}}",
+                    
+                    {% endfor %}       ],
+        datasets: [{ 
+            data: [{% for x in district %}
+                    "{{x.confirmed}}",
+                  {% endfor %}                      ],
+            label: "Total cases",
+            borderColor: "rgba(93, 93, 255, 0.9)",
+            backgroundColor:'rgba(93, 93, 255, 0.15)',
+            borderWidth: 1.5,
+          },{ 
+            data: [{% for x in district %}
+                    "{{x.deceased}}",
+                  {% endfor %}                      ],
+            label: "Total Deaths",
+            borderColor: "red",
+            backgroundColor:'rgb(255, 0, 0, 0.2)',
+            borderWidth: 1.5,
+          },{ 
+            data: [{% for x in district %}
+                    "{{x.recovered}}",
+                  {% endfor %}                      ],
+            label: "Total Recovered",
+            borderColor: "green",
+            backgroundColor:'rgb(0, 128, 0, 0.2)',
+            borderWidth: 1.5,
+          }
+      
+          
+          ],
+           
+  
+      },
+  
+      options: {
+        title: {
+          display: true,
+          text: 'Rise in All types of cases in {{dname}}'
+        },
+        scales: {
+                      xAxes: [{ 
+                        gridLines:{
+                          display:false,
+                          
+                           
+                              tickMarkLength: 19
+                         
+                        }
+                      }],
+                      yAxes: [{
+                        gridLines:{
+                          display:false,
+                          tickMarkLength: 19
+                        }
+                      }]
+                  }
+      }
+    });
+  
+    new Chart(document.getElementById("line-chart-deaths"), {
+      type: 'line',
+      data: {
+        labels: [{% for x in district %}
+                    
+                    "{{x.date}}",
+                    
+                    {% endfor %}       ],
+        datasets: [{ 
+            data: [{% for x in district %}
+                    "{{x.delta.deaths}}",
+                  {% endfor %}                      ],
+            label: "Per day deaths",
+            backgroundColor: 'rgb(255, 0, 0, 0.15)',
+            borderColor:  'red',
+            borderWidth: 1
+          }] 
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Rise in deaths in {{info.name}}'
+        },
+        scales: {
+                      xAxes: [{ 
+                        gridLines:{
+                          display:false,                                      
+                              tickMarkLength: 19             
+                        }
+                      }],
+                      yAxes: [{
+                        gridLines:{
+                          display:false,
+                          tickMarkLength: 19
+                        }
+                      }]
+                  }
+      }
+    });
+  
+  
+    new Chart(document.getElementById("line-chart-confirmed"), {
+      type: 'line',
+      data: {
+        labels: [{% for x in district %}
+                    
+                    "{{x.date}}",
+                    
+                    {% endfor %}       ],
+        datasets: [{ 
+            data: [{% for x in district %}
+                    "{{x.delta.confirmed}}",
+                  {% endfor %}                      ],
+            label: "Per day confirmed cases",
+            backgroundColor: 'rgba(93, 93, 255, 0.15)',           
+            borderColor: 'rgba(93, 93, 255, 0.9)',
+            borderWidth: 1
+            
+          }] 
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Rise in confirmed cases in {{info.name}}'
+        },
+        scales: {
+                      xAxes: [{ 
+                        gridLines:{
+                          display:false,
+                          // ticks: {
+                           
+                              tickMarkLength: 19
+                          //}
+                        }
+                      }],
+                      yAxes: [{
+                        gridLines:{
+                          display:false,
+                          tickMarkLength: 19
+                        }
+                      }]
+                  }
+      }
+    });
+  
+    
+    </script>
+{% endblock script %}

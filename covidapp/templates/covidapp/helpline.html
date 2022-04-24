@@ -1,0 +1,37 @@
+{% extends 'covidapp/base.html' %}
+
+
+{% block title %}
+TraCOR - Helpline numbers
+{% endblock title %}
+
+{% block content %}
+
+<div class='card' style="background-color:rgb(31, 31, 31);margin:12px;padding: 12px;">
+  <strong style="letter-spacing: 1px;font-size: 12px;"><marquee onmouseover="stop()" onmouseout="start()">
+   Boycott Chinese products. Support local indian businesses. #VocalForLocal
+  </marquee>
+  </strong>
+</div> 
+<br><br>
+
+<div class="container">
+    <table class="animated animatedFadeInUp fadeInUp" style="animation-delay: 0.5s;">
+        <tr>
+          <th  style='text-align: left;font-size: 18px;'>State</th>
+          <th  style='font-weight:1000;text-align: left;font-size: 18px;'>Helpline No.</th>
+          
+          
+        </tr>
+         
+        {% for h in helpline1 %}
+        <tr>
+          <td><p style='text-align: left;'>{{h.loc}}</p></td>
+          <td><p style='text-align: left;'>{{h.number}}</p></td>
+         
+        </tr>
+        {% endfor %}
+      </table>
+      </div>
+   
+{% endblock content %}

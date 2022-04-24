@@ -1,0 +1,229 @@
+{% extends 'covidapp/base.html' %}
+
+{% block title %}
+TraCOR - Global Statistics
+{% endblock title %}
+
+
+{% block content %}
+<div class='card' style="background-color:rgb(31, 31, 31);margin:12px;padding: 12px;">
+  <strong style="letter-spacing: 1px;font-size: 12px;"><marquee onmouseover="stop()" onmouseout="start()">
+    Top 3 countries with highest number of cases.&ensp;&ensp;1. {{1.name}} : {{1.latest_data.confirmed}}&ensp;&ensp;2. {{2.name}} : {{2.latest_data.confirmed}}&ensp;&ensp;3. {{3.name}} : {{3.latest_data.confirmed}}
+  </marquee>
+  </strong>
+  </div>
+<div class=" container" >
+    <p class="animated animatedFadeInUp fadeInUp " style="font-weight: bold;font-size: 15px;padding: 15px;animation-delay: 0.3s;text-align: center;"><i class="fa fa-calendar" style="padding: 10px;"></i>{{d}}</p>
+    <h5 class='kit animated animatedFadeInUp fadeInUp' style="text-align: center;font-weight: bold;margin:25px;color:white;animation-delay: 0.2s;"><i class='fas fa-globe-americas' style="padding: 12px;color: skyblue;"></i>GLOBAL <span style="color: bisque;">COVID19</span> STATS </h4><br>
+    <div class=" row" style="text-align: center;padding-bottom:30px;margin: 3px;">
+      <div class=" col-4  animated animatedFadeInUp fadeInUp" style="animation-delay: 0.3s;">
+        <h5 id="confirm" class="kit" style="color:rgba(93, 93, 255, 0.801);font-weight: bold;">{{global.totalConfirmed}}</h5>
+        <p style="font-size: 15px;"><span class="count" style="color: rgb(160, 160, 253);">[+{{global.totalNewCases}}]</span></p><br>
+        <p style="color: rgba(93, 93, 255, 0.801);font-size: 15px;font-weight: bold;">Confirmed</h1>
+      </div>
+      <div class="col-4  animated animatedFadeInUp fadeInUp" style="animation-delay: 0.4s;">
+        <h5 class="kit" style="color: red;font-weight: bold;">{{global.totalDeaths}}</h5>
+        <p style="font-size: 15px;"><span class="count" style="color: rgb(240, 133, 133);">[+{{global.totalNewDeaths}}]</span></p><br>
+        <p style="color: red;font-size: 15px;font-weight: bold;">Deaths</h8>
+      </div><br>
+      <div class="col-4  animated animatedFadeInUp fadeInUp" style="animation-delay: 0.5s;">
+        <h5 class="kit" style="color: green;font-weight: bold;">{{global.totalRecovered}}</h5>
+        <p  style="font-size: 15px;"><span class="count" style="color: yellowgreen;"><i class="fa fa-heart" aria-hidden="true" style="padding: 5px;"></i></span></p><br>
+        <p  style="color: green;font-size: 15px;font-weight: bold;">Cured</p>
+      </div>
+      
+  
+    </div>
+    <p class="animated animatedFadeInUp fadeInUp text-muted" style="animation-delay:0.8s;font-weight: bold;text-align: center;">Last updated on: {{last_updated}}</p>
+
+    <br>
+    
+    
+      <div >
+        <div class="row" >
+          <div class="container col-12 col-md-offset-3 col-md-4"><canvas class=' new_card' height="275px" id="line-chart-total" style="margin-bottom: 40px;padding: 15px;border:0px"></canvas></div>
+          <div class="container col-12 col-md-offset-3 col-md-4"><canvas class='new_card' height="275px" id="line-chart-confirmed" style="margin-bottom: 40px;padding: 15px; background-color: rgba(93, 93, 255, 0.15);border:0px" ></canvas></div>
+          <div class="container col-12 col-md-offset-3 col-md-4"><canvas class="new_card" height="275px"  id="line-chart-deaths" style="margin-bottom: 40px;padding: 15px;background-color:rgb(255, 0, 0, 0.15);border:0px" ></canvas></div><br><br>
+          </div> 
+  
+      </div></div>
+      
+  
+  </div>
+  {% block script %}
+  <script> 
+    new Chart(document.getElementById("line-chart-total"), {
+      type: 'bar',
+      data: {
+        labels: [{% for x in globaltimeline %}
+                    
+                    "{{x.date}}",
+                    
+                    {% endfor %}       ],
+        datasets: [{ 
+            data: [{% for x in globaltimeline %}
+                    "{{x.confirmed}}",
+                  {% endfor %}                      ],
+            label: "Total cases",
+            borderColor: "rgba(93, 93, 255, 0.9)",
+            backgroundColor:'rgba(93, 93, 255, 0.15)',
+            borderWidth: 1.5,
+            barThickness:8
+          },{ 
+            data: [{% for x in globaltimeline %}
+                    "{{x.recovered}}",
+                  {% endfor %}                      ],
+            label: "Total Cured",
+            borderColor: "green",
+            backgroundColor:'rgb(0, 128, 0, 0.2)',
+            borderWidth: 1.5,
+            barThickness:8
+            
+          },{ 
+            data: [{% for x in globaltimeline %}
+                    "{{x.deaths}}",
+                  {% endfor %}                      ],
+            label: "Total Deaths",
+            borderColor: "red",
+            backgroundColor:'rgb(255, 0, 0, 0.2)',
+            borderWidth: 1.5,
+            barThickness:8
+          }
+          ],
+          
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Rise in Total cases globally'
+        },
+        scales: {
+                      xAxes: [{ 
+                        gridLines:{
+                          display:false,
+                          
+                           
+                              tickMarkLength: 19
+                         
+                        }
+                      }],
+                      yAxes: [{
+                        gridLines:{
+                          display:false,
+                          tickMarkLength: 19
+                        }
+                      }]
+                  }
+                 
+      }
+    });
+  
+  
+    var ctx = document.getElementById('line-chart-deaths').getContext('2d');
+          var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: [
+                  {% for x in globaltimeline %}
+                    
+                    "{{x.date}}",
+                    
+                    {% endfor %}      
+                           ],
+                 
+                  datasets: [{
+                      
+                      label: 'Per day deaths' ,
+                      data: [{% for x in globaltimeline %}
+                    {{x.new_deaths}},
+                  {% endfor %}],                  
+                      backgroundColor: 'rgb(255, 0, 0, 0.15)',
+                          
+                    
+                      borderColor: 
+                          'red',
+                   
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                title: {
+                          display: true,
+                          text: 'Rise in Deaths globally'
+                        },
+                  scales: {
+                      xAxes: [{
+                        gridLines:{
+                          display:false,
+                            
+                              tickMarkLength: 19
+                        }
+                      }],
+                      yAxes: [{
+                        gridLines:{
+                          display:false,
+                            
+                              tickMarkLength: 19
+                        }
+                      }]
+                  }
+              }
+          });
+  
+          
+  
+          var ctx = document.getElementById('line-chart-confirmed').getContext('2d');
+          var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: [
+                  {% for x in globaltimeline %}
+                    
+                    "{{x.date}}",
+                    
+                    {% endfor %}      
+                           ],
+                 
+                  datasets: [{
+                      
+                      label: 'Per day confirmed cases' ,
+                     
+                    
+                      data: [{% for x in globaltimeline %}
+                    {{x.new_confirmed}},
+                  {% endfor %}],                  
+                      backgroundColor: 'rgba(93, 93, 255, 0.15)',
+                          
+                    
+                      borderColor: 'rgba(93, 93, 255, 0.9)',
+                   
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                title: {
+                          display: true,
+                          text: 'Rise in Confirmed Cases globally'
+                        },
+                  scales: {
+                      xAxes: [{ 
+                        gridLines:{
+                          display:false,
+                           
+                              tickMarkLength: 19
+                          
+                        }
+                      }],
+                      yAxes: [{
+                        gridLines:{
+                          display:false,
+                          tickMarkLength: 19
+                        }
+                      }]
+                  }
+              }
+          });
+  
+  </script>
+  {% endblock script %}
+{% endblock content %}

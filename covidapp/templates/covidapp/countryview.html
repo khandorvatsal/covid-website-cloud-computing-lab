@@ -1,0 +1,216 @@
+{% extends 'covidapp/base.html' %}
+
+
+{% block title %}
+TraCOR - Covid19 in {{info.name}} 
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+<p class="animated animatedFadeInUp fadeInUp " style="font-weight: bold;font-size: 15px;padding: 15px;animation-delay: 0.3s;text-align: center;"><i class="fa fa-calendar" style="padding: 10px;"></i>{{d}}</p>
+
+  <div  style="text-align: center;">
+  
+    <h5 class="kit animated animatedFadeInUp fadeInUp" style="color: white;animation-delay: 0.6s;" ><i class="fa fa-viruses" style="padding: 10px;color: rgb(194, 52, 52);" ></i>COVID19 IN <span style="color:lightsalmon;font-weight: bold;text-transform: uppercase;">{{info.name}}</span></h4><br><br>
+    <div class="row">
+        <div class="col-4 animated animatedFadeInUp fadeInUp" style="animation-delay:0.9s;">
+             <h5 class="kit" id="cases" style="font-weight: bold;color:rgb(100, 100, 255);"></h5>
+             <p><span class="counter" style="color: rgb(134, 134, 252);font-size: 15px; ">{% if info.today.confirmed > -1 %}+[{{info.today.confirmed}}]{% endif %}</span></p><br>
+             <h7 style="font-weight: bold;color: rgb(100, 100, 255);font-size: 15px;">Cases</p>
+        </div>
+        
+        <div class="col-4 animated animatedFadeInUp fadeInUp" style="animation-delay:1.5s;">
+            <h5 class="kit" id="deaths" style="font-weight: bold;color:red ;"></h5>
+            <p><span  style="color: rgb(255, 77, 77);font-size: 15px; ">{% if info.today.deaths > -1 %}+[{{info.today.deaths}}]{% endif %}</span></p><br>
+            <p style="font-weight: bold;color: red;font-size: 15px;">Deaths</p>
+        </div>
+
+        <div class="col-4 animated animatedFadeInUp fadeInUp" style="animation-delay:1.8s;">
+            <h5 class="kit" id="cured" style="font-weight: bold;color:green ;"></h5 >
+            <p><span  style="color: yellowgreen; font-size: 15px;"><i class="fa fa-heart" aria-hidden="true" style="padding: 5px;"></i></span></p><br>
+            <h7 style="font-weight: bold;color: green;font-size: 15px;">Cured</p>
+        </div>
+    </div><br>
+    <p class="animated animatedFadeInUp fadeInUp" style="color: red;animation-delay: 1.8s;"><span style="font-weight: bold;">Death rate : </span>{{info.latest_data.calculated.death_rate|floatformat:4}}</p><br>
+    <p class="animated animatedFadeInUp fadeInUp" style="color: green;animation-delay: 1.8s;"><span style="font-weight: bold;">Recovery rate : </span>{% if info.name == 'Spain' or info.name == 'UK' or info.name == 'Netherlands' or info.name == 'Sweden' and info.latest_data.recovered == '0' %}N/A{% else %}{{info.latest_data.calculated.recovery_rate|floatformat:4}}{% endif %}</p><br>
+    <p class="animated animatedFadeInUp fadeInUp" style="color: rgb(95, 95, 255);font-weight: bold;animation-delay: 1.8s;">Cases per million : {{info.latest_data.calculated.cases_per_million_population}}</p><br>
+
+    <p class="animated animatedFadeInUp fadeInUp text-muted" style="animation-delay:1.8s;font-weight: bold;">Last updated on: {{info.updated_at}}</p>
+  </div>
+</div><br><br>
+    
+<div class='container'>
+  <div class="row">
+        <div class="container col-12 col-md-4 "><canvas class='new_card' height="275px" id="line-chart-total" style="margin-bottom: 40px;padding: 15px; border:0px"></canvas></div>
+  
+  
+    <div class="container col-12 col-md-4"><canvas class='new_card' height="275px" id="line-chart-deaths" style="margin-bottom: 40px;padding: 15px;background-color:rgb(255, 0, 0, 0.2); border:0px" ></canvas></div>
+    <div class="container col-12  col-md-4"><canvas class="new_card" height="275px" id="line-chart-confirmed" style="margin-bottom: 40px;padding: 15px; border:0px;background-color:rgba(93, 93, 255, 0.15)" ></canvas></div><br><br>
+  </div>
+ </div> 
+ 
+{% endblock content %}
+
+
+
+
+{% block script %}
+<script>
+  var cname = '{{info.name}}';
+  var cases = {{info.latest_data.confirmed}};
+  cases1 = cases.toLocaleString();
+  document.getElementById("cases").innerHTML= cases1 ;
+  var deaths = {{info.latest_data.deaths}};
+  deaths1 = deaths.toLocaleString();
+  document.getElementById("deaths").innerHTML= deaths1 ;
+  if (cname == 'Spain' || cname == 'Netherlands' || cname == 'UK' || cname == 'Sweden')
+  {
+    document.getElementById("cured").innerHTML= 'N/A' ;
+  }
+  else
+  {
+    var recovered = {{info.latest_data.recovered}};
+    recovered1 = recovered.toLocaleString();
+    document.getElementById("cured").innerHTML= recovered1 ;
+  }
+  
+</script>
+  <script> 
+
+  new Chart(document.getElementById("line-chart-total"), {
+    type: 'line',
+    data: {
+      labels: [{% for key,value in timeline.items %}
+                  
+                  "{{key}}",
+                  
+                  {% endfor %}       ],
+      datasets: [{ 
+          data: [{% for key,value in timeline.items %}
+                  "{{value.confirmed}}",
+                {% endfor %}                      ],
+          label: "Total cases",
+          borderColor: "rgba(93, 93, 255, 0.9)",
+          backgroundColor:'rgba(93, 93, 255, 0.15)',
+          borderWidth: 1.5
+        },{ 
+          data: [{% for key,value in timeline.items %}
+                  "{{value.deaths}}",
+                {% endfor %}                      ],
+          label: "Total Deaths",
+          borderColor: "red",
+          backgroundColor:'rgb(255, 0, 0, 0.2)',
+          borderWidth: 1.5
+        },{ 
+          data: [{% for key,value in timeline.items %}
+                  "{{value.recovered}}",
+                {% endfor %}                      ],
+          label: "Total Recovered",
+          borderColor: "green",
+          backgroundColor:'rgb(0, 128, 0, 0.2)',
+          borderWidth: 1.5
+        }
+    
+        
+        ],
+         
+
+    },
+
+    options: {
+      title: {
+        display: true,
+        text: 'Rise in All types of cases in {{info.name}}'
+      }
+    }
+  });
+
+  new Chart(document.getElementById("line-chart-deaths"), {
+    type: 'line',
+    data: {
+      labels: [{% for key,value in timeline.items %}
+                  
+                  "{{key}}",
+                  
+                  {% endfor %}       ],
+      datasets: [{ 
+          data: [{% for key,value in timeline.items %}
+                  "{{value.new_deaths}}",
+                {% endfor %}                      ],
+          label: "Per day deaths",
+          backgroundColor: 'rgb(255, 0, 0, 0.15)',
+          borderColor:  'red',
+          borderWidth: 1
+        }] 
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Rise in deaths in {{info.name}}'
+      },
+      scales: {
+                    xAxes: [{ 
+                      gridLines:{
+                        display:false,                                      
+                            tickMarkLength: 19             
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        tickMarkLength: 19
+                      }
+                    }]
+                }
+    }
+  });
+
+
+  new Chart(document.getElementById("line-chart-confirmed"), {
+    type: 'line',
+    data: {
+      labels: [{% for key,value in timeline.items %}
+                  
+                  "{{key}}",
+                  
+                  {% endfor %}       ],
+      datasets: [{ 
+          data: [{% for key,value in timeline.items %}
+                  "{{value.new_confirmed}}",
+                {% endfor %}                      ],
+          label: "Per day confirmed cases",
+          backgroundColor: 'rgba(93, 93, 255, 0.15)',           
+          borderColor: 'rgba(93, 93, 255, 0.9)',
+          borderWidth: 1
+          
+        }] 
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Rise in confirmed cases in {{info.name}}'
+      },
+      scales: {
+                    xAxes: [{ 
+                      gridLines:{
+                        display:false,
+                        // ticks: {
+                         
+                            tickMarkLength: 19
+                        //}
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines:{
+                        display:false,
+                        tickMarkLength: 19
+                      }
+                    }]
+                }
+    }
+  });
+
+  
+  </script>
+{% endblock script %}

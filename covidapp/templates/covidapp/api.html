@@ -1,0 +1,276 @@
+{% extends 'covidapp/base.html' %}
+
+
+{% block title %}
+TraCOR
+{% endblock title %}
+
+
+{% block style %}
+<style>
+
+  
+      * {
+      margin: 0;
+    }
+
+    
+
+    #map {
+      width: 100%;
+      height: 70%;
+    }
+
+
+   
+  .ta{
+    margin-bottom: 30px;
+  }
+.my-custom-scrollbar {
+position: relative;
+height: 500px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+
+
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    background: #121212;
+}
+.form-control:focus {
+  box-shadow: none;
+}
+
+.form-control-underlined {
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-radius: 0;
+  padding-left: 0;
+}
+
+</style>
+{% endblock style %}
+
+
+
+
+
+
+
+{% block content %}
+
+<div class='card' style="background-color:rgb(31, 31, 31);margin:12px;padding: 12px;">
+<strong style="letter-spacing: 1px;font-size: 12px;"><marquee onmouseover="stop()" onmouseout="start()">
+  Top 3 countries with highest number of cases.&ensp;&ensp;1. {{1.name}} : {{1.latest_data.confirmed}}&ensp;&ensp;2. {{2.name}} : {{2.latest_data.confirmed}}&ensp;&ensp;3. {{3.name}} : {{3.latest_data.confirmed}}
+</marquee>
+</strong>
+</div>
+
+<br>
+
+<div class="container">       
+
+<center><form method="post" action="/search/" style="margin-top: ;">
+  {% csrf_token %}
+  <div class="p-1  shadow-sm md-4" style="border-radius: 24px;width:275px;background-color: #1d1d1d;border: 3px solid lightgray;">
+    <div class="input-group">
+      <input type="search" list="browsers" placeholder="Search state,country" onfocus="this.value=''" type="search" name="searchstate" aria-describedby="button-addon1" class="form-control border-0 " style="background-color: #1d1d1d;border-radius: 10px;color: whitesmoke;">
+      <div class="input-group-append">
+        <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search" style="color: white;"></i></button>
+      </div>
+    </div>
+  </div>
+  <datalist id="browsers"  style="background-color: #121212;">
+    {% for key,value in statelist.items %}
+    <option value='{{value.statecode}}' style="background-color: #121212;">{{key}}</option>
+    {% endfor %}
+    {% for x in all_country %}
+    <option value='{{x.code}}'>{{x.name}}</option>
+    {% endfor %}
+  </datalist>
+  </form></center><br>
+{% if messages %}
+{% for x in messages %}
+<center><span class='alert alert-custom text-muted' style="background-color: #121212;">{{x}}</span></center>
+{% endfor %}
+{% endif %}
+</div>
+<div class=" container" >
+  <h5 class='kit animated animatedFadeInUp fadeInUp' style="text-align: center;font-weight: bold;margin:25px;color:white;animation-delay: 0.1s;"><i class='fas fa-globe-americas' style="padding: 12px;color: skyblue;"></i>GLOBAL <span style="color: bisque;">COVID19</span> STATS </h4><br>
+  <div class=" row" style="text-align: center;padding-bottom:30px;">
+    <div class=" col-4  animated animatedFadeInUp fadeInUp" style="animation-delay: 0.3s;">
+      <h5 id="confirm" class="kit" style="color:rgba(93, 93, 255, 0.801);font-weight: bold;">{{global.totalConfirmed}}</h5>
+      <p style="font-size: 15px;"><span class="count" style="color: rgb(160, 160, 253);">+[{{global.totalNewCases}}]</span></p><br>
+      <p style="color: rgba(93, 93, 255, 0.801);font-size: 15px;font-weight: bold;">Confirmed</h1>
+    </div>
+    <div class="col-4  animated animatedFadeInUp fadeInUp" style="animation-delay: 0.5s;">
+      <h5 class="kit" style="color: red;font-weight: bold;">{{global.totalDeaths}}</h5>
+      <p style="font-size: 15px;"><span class="count" style="color: rgb(240, 133, 133);">+[{{global.totalNewDeaths}}]</span></p><br>
+      <p style="color: red;font-size: 15px;font-weight: bold;">Deaths</h8>
+    </div><br>
+    <div class="col-4  animated animatedFadeInUp fadeInUp" style="animation-delay: 0.7s;">
+      <h5 class="kit" style="color: green;font-weight: bold;">{{global.totalRecovered}}</h5>
+      <p  style="font-size: 15px;"><span class="count" style="color: yellowgreen;"><i class="fa fa-heart" aria-hidden="true" style="padding: 5px;"></i></span></p><br>
+      <p  style="color: green;font-size: 15px;font-weight: bold;">Cured</p>
+    </div>
+    
+
+  </div>
+  <div style="text-align: center;"><a style="animation-delay: 0.9s;" href={% url 'globalview' %} class="animated animatedFadeInUp fadeInUp" >Click for more info</a>
+  </div><br>
+    <div class="animated animatedFadeInUp fadeInUp" style="margin: 10px;margin-top: 20px;border-bottom: 1px solid lightgray;animation-delay: 1s;"></div>
+
+</div><br><br>
+
+<div class="container"  style="text-align: center; text-align: center;"> 
+  
+  <h5 class='kit animated animatedFadeInUp fadeInUp' style="text-align: center;font-weight: bold;color: white;animation-delay: 1.1s;"><i class="fa fa-viruses" style="padding: 12px;"></i><span style="color: bisque;">COVID19</span> IN INDIA</h5><br><br>
+      
+      <div class="row" style="padding-bottom:30px;">
+          <div class=" col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.2s;margin-bottom: 30px;">
+            <h5 class='kit'><span class="counter " style="color: rgba(93, 93, 255, 0.801);font-weight: bold;">{{india_total.confirmed}}</span></h3>
+            <p ><span class="counter" style="font-size: 12px;color:rgb(160, 160, 253); ">+[{{india_total.deltaconfirmed}}]</span></p><br>         
+              <p style="font-size: 12px;font-weight: bold;color: rgba(93, 93, 255, 0.801);">Cases</p>
+          </div>
+
+          <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.2s;margin-bottom: 30px;">
+            <h5 class='kit'><span class="counter" style="color: rgb(203, 206, 10);font-weight: bold;">{{india_total.active}}</span></h1>
+            <p ><span class="counter" style="font-size: 12px;color: rgb(203, 206, 10);"><i class="fa fa-heart" aria-hidden="true" style="padding-top: 5px;"></i></span></p><br>
+              <p style="font-size: 12px;font-weight: bold;color: rgb(203, 206, 10);">Active</p>
+          </div>
+
+          <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.3s;margin-bottom: 30px;"> 
+            <h5 class='kit'><span class="counter" style="color: red;font-weight: bold;">{{india_total.deaths}}</span></h1>
+            <p ><span class="counter" style="color: red;font-size: 12px;">+[{{india_total.deltadeaths}}]</span></p><br>                 
+              <p   style="font-weight: bold;font-size: 12px;color: red;">Deaths</p> 
+            </div>
+
+          <div class="col-3 animated animatedFadeInUp fadeInUp" style="animation-delay:1.4s;margin-bottom: 40px;">
+            <h5 class='kit'><span class="counter" style="color: green;font-weight: bold;">{{india_total.recovered}}</span></h1>
+              <p style="font-size: 12px;"><span class="counter" style="color: green;">+[{{india_total.deltarecovered}}]</span></p><br>        
+                <p style="font-size: 12px;font-weight: bold;color: green;">Cured</p>
+          </div>
+        <div class="container animated animatedFadeInUp fadeInUp" style="color: white;padding: 12px;animation-delay: 1.5s"><a href="/india/">Click here for statewise stats</a> </div>
+        
+        </div>
+     
+</div>
+<div class='container'>
+  <div class=" animated animatedFadeInUp fadeInUp" style="border-top: 1px solid lightgray;margin: 4px;animation-delay: 1.6s"></div>
+</div>
+<br><br>
+
+<div class="container">
+  <p class=" animated animatedFadeInUp fadeInUp" style="color:rgba(255, 255, 224, 0.767);font-weight: bold;text-align: center;animation-delay: 1.7s">Tap the marker for <span style="color: red;">COVID19</span> data in that particular country:</p><br>
+    <div class=" animated animatedFadeInUp fadeInUp" id="map" style='animation-delay: 1.8s'></div><br><br>
+</div>
+
+<div class=" container animated animatedFadeInUp fadeInUp " style="animation-delay: 1.9s;">
+<h3 style="font-weight: 600;">World</h2><br>
+<center>
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+<table >
+    <tr>
+      <th class='sticky-top' style='text-align: left;'>Country</th>
+      <th class='sticky-top' style='color:rgba(93, 93, 255, 0.801);font-weight:1000'>Confirmed</th>
+      <th class='sticky-top' style="color: red;">Deaths</th>
+      <th class='sticky-top' style="color: green;">Recovered</th>
+      
+    </tr>
+      
+    {% for value in all_country %}
+    <tr>
+      <td><p style='text-align: left;'><a href='/country/{{value.code}}/'>{{value.rank}}. {{value.name}}</a></p></td>
+      <td><p ><span style='color: rgba(93, 93, 255, 0.801);'>{% if value.today.confirmed != 0 %}+{{value.today.confirmed}}{% endif %}</span> {{value.latest_data.confirmed}}</p></td>
+      <td><p ><span style="color: red;">{% if value.today.deaths != 0 %}+ {{value.today.deaths}}{% endif %}</span> {{value.latest_data.deaths}}</p></td>
+      <td><p ><span style="color: green;"> </span> {% if value.name == 'Spain' or value.name == 'UK' or value.name == 'Netherlands' or value.name == 'Sweden' and value.latest_data.recovered == '0' %}N/A{% else %}{{value.latest_data.recovered}}{% endif %}</p></td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+</center>
+</div></div><br>
+      </div>
+
+
+{% block script %}
+<script>
+  const coordinates = {
+    Latitude:[ 
+      {% for x in all_country %}
+      '{{x.coordinates.latitude}}', 
+      {% endfor %}
+    ],
+    Longitude: [
+      {% for x in all_country %}
+      '{{x.coordinates.longitude}}', 
+      {% endfor %}
+    ],
+    name:[
+        {% for x in all_country %}
+        '{{x.name}}',
+        {% endfor %}
+    ],
+    Cases:[
+        {% for x in all_country %}
+        '{{x.latest_data.confirmed}}',
+        {% endfor %}
+    ],
+    Deaths:[
+        {% for x in all_country %}
+        '{{x.latest_data.deaths}}',
+        {% endfor %}
+    ],
+    Recovered:[
+        {% for x in all_country %}
+        '{{x.latest_data.recovered}}',
+        {% endfor %}
+    ],
+    code:[
+
+        {% for x in all_country %}
+        '{{x.code}}',
+        {% endfor %}
+
+    ]
+  };
+  
+  var myIcon = L.icon({
+    iconUrl: 'https://img.icons8.com/nolan/64/street-view.png',
+    iconSize: [35, 45],
+
+});
+  const map = L.map('map').setView([20, 77], 3);
+  
+  var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+subdomains: 'abcd',
+maxZoom: 19
+}).addTo(map);
+
+  for (let i = 0; i < Object.keys(coordinates.Latitude).length; i =i+ 1) {
+    const marker = L.marker([
+      coordinates.Latitude[i],
+      coordinates.Longitude[i],
+    ],{icon : myIcon});
+    marker.myData = { id: coordinates.name[i] ,cases:coordinates.Cases[i],deaths:coordinates.Deaths[i],recovered:coordinates.Recovered[i]};
+    marker.bindPopup("<p style='font-weight:800'>"+ marker.myData.id +"</p>"+"<p>"+ "Cases"+" : "+marker.myData.cases +"</p>"+"<p>"+"Deaths"+" : "+marker.myData.deaths +"</p>"+"<p>"+"Recovered"+" : "+marker.myData.recovered +"</p>");
+    marker.on('mouseover',function(e){
+      this.openPopup();
+    });
+    marker.on('mouseout',function(e){
+      this.closePopup();
+    });
+
+    marker.addTo(map);
+  }
+</script>
+
+{% endblock script %}
+
+{% endblock content %}

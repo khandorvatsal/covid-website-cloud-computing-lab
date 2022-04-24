@@ -1,0 +1,123 @@
+{% extends 'covidapp/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+TraCOR - About Us
+{% endblock title %}
+
+
+{% block style %}
+<style>
+.btn-linkedin {
+    background: #0E76A8;
+    border-radius: 0;
+    color: #fff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #084461;
+    border-radius:5px
+}
+.btn-linkedin:link, .btn-linkedin:visited {
+    color: #fff;
+}
+.btn-linkedin:active, .btn-linkedin:hover {
+    background: #084461;
+    color: #fff;
+}
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+	position: relative;
+	padding: 3px 5px;
+  margin: 0px 10px 10px 0px;
+  float: left;
+	border-radius: 10px;
+	
+	
+	color: #FFF;
+	text-decoration: none;	
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+}
+
+#id_suggestion{
+    width: 60%;
+    border-radius: 7px;
+}
+
+#id_rating{
+    width: 60%;
+    border-radius: 7px;
+}
+
+#id_email{
+    width: 60%;
+    border-radius: 7px;
+}
+
+</style>
+{% endblock style %}
+{% block content %}
+<div class='container'>
+
+    {% if messages %}
+    <br>
+    {% for x in messages %}
+    <div class='alert alert-custom' style="background-color: #1d1d1d;font-weight: 450;"><center>{{x}}</center></div>
+    {% endfor %}
+   {% endif %}
+   {% if form.errors %}
+   <br>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-custom" style="background-color: #1d1d1d;font-weight: 450;">
+                <center>{{ error|escape }}</center>
+                </div>   
+            {% endfor %}
+        {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-custom" style="background-color: #1d1d1d;font-weight: 450;">
+        <center>{{ error|escape }}</center>
+        </div>
+    {% endfor %}
+    {% endif %}
+    <br>
+    <div class='new_card col-12 animated animatedFadeInUp fadeInUp' style="animation-delay: 0.5s;">
+       
+    <center><h2 class='mt-3'><i class="fas fa-cogs"></i> Who made this website?</h2></center>
+    <br><br>
+    <ul style='list-style-type: disc'>
+        <li>This website is made with <i class='fa fa-heart' style="color:red"></i> by <strong>Vatsal Khandor</strong> and <strong>Vaibhav Mehta</strong>.</li><br>
+        <li>We are computer engineering students from Dwarkadas J Sanghvi College Of Engineering, Mumbai.</li><br>
+        <li><a class='btn btn-linkedin' href='https://www.linkedin.com/in/khandorvatsal/'><i class="fab fa-linkedin-in"></i> @Vatsal Khandor</a>&ensp; <a class='btn btn-linkedin' href='#'><i class="fab fa-linkedin-in" aria-hidden="true"></i> @Vaibhav Mehta</a></li><br>
+        <li>If you have any cool ideas to add to the website, fill in the suggestion form below or connect on LinkedIn.</li>
+        </ul>
+        <div class='text-muted' style='text-align: right;font-weight: 630;'><i class="fa fa-info-circle" aria-hidden="true"></i> {{count}} {% if count == 1 %}person has {% else %}people have {% endif %}rated this site so far.</div>
+    </div>
+    <br>
+     <div class='new_card col-12 animated animatedFadeInUp fadeInUp' style="padding:20px;animation-delay: 1s;">
+        <div class='col-12 '>
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            <p>Suggestion/Comments (if any) :<br>{{form.suggestion}}</p><br>
+                <p>Email<sup>*</sup> :<br>{{form.email}}</p><br>
+                <p>Rating (Out of 5)<sup>*</sup> :<br>{{form.rating}}</p>
+                
+            <button class="btn btn-secondary"  type='submit' style="background-color: #1d1d1d;">Submit</button>
+        </form>
+        </div>
+    </div>
+    </div>
+    
+{% endblock content %}
+

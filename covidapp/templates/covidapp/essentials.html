@@ -1,0 +1,247 @@
+{% extends 'covidapp/base.html' %}
+
+{% block title %}
+TraCOR - Essentials
+{% endblock title %}
+
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<div class="container">
+<br>
+<div id="extra" name="extra">
+    <label class="control-label" for="branches"><h6 style="color: rgb(189, 255, 189);">Choose Category<sup>*</sup></h6></label>
+    <select onchange='category()' class="form-control" type="text" id="branches" name="branches" style="background-color: rgb(58, 58, 58);color: white;" >
+        {% for x in category_list %}
+        <option  name='branch' value="{{x}}">{{x}}</option>
+        {% endfor %}
+
+    </select>    
+  </div><br><br>
+  
+  <div style="display: none;" id="Free Food">
+    <h4>Free Food</h4>
+  {% for data in data %}
+  
+  {% if data.city == 'Mumbai' and data.category == "Free Food" %}
+  <div class='new_card' style="padding: 20px;word-wrap: break-word;">
+      <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+      <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+      {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+      {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+  </div>
+   <br>
+   {% endif %}
+   
+   {% endfor %}
+  </div>
+
+  <div style="display: none;" id="Mental well being and Emotional Support">
+    <h4>Mental well being and Emotional Support</h4>
+    {% for data in data %}
+    
+    {% if data.city == 'Mumbai' and data.category == "Mental well being and Emotional Support" %}
+    <div class='new_card' style="padding: 20px;word-wrap: break-word;">
+        <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+        <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+        {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+        {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+    </div>
+     <br>
+     {% endif %}
+     
+     {% endfor %}
+    </div>
+
+    <div style="display: none;" id="Accommodation and Shelter Homes">
+        
+    <h4>Accommodation and Shelter Homes</h4>
+    {% for data in data %}
+    
+    {% if data.city == 'Mumbai' and data.category == "Accommodation and Shelter Homes" %}
+    <div class='new_card' style="padding: 20px;word-wrap: break-word;">
+        <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+        <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+        {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+        {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+    </div>
+     <br>
+     {% endif %}
+     
+     {% endfor %}
+    </div>
+    <div style="display: none;" id="Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]">
+        <h4>Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]</h4>
+      {% for data in data %}
+      
+      {% if data.city == 'Mumbai' and data.category == "Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]" %}
+      <div class='new_card' style="padding: 20px;word-wrap: break-word;">
+          <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+          <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+          {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+          {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+      </div>
+       <br>
+       {% endif %}
+       
+       {% endfor %}
+      </div>
+
+      <div style="display: none;" id="CoVID-19 Testing Lab">
+        <h4>CoVID-19 Testing Lab</h4>
+      {% for data in data %}
+      
+      {% if data.city == 'Mumbai' and data.category == "CoVID-19 Testing Lab" %}
+      <div class='new_card' style="padding: 20px;word-wrap: break-word;">
+          <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+          <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+          {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+          {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+      </div>
+       <br>
+       {% endif %}
+       
+       {% endfor %}
+      </div>
+      <div  id="Fundraisers">
+        <h4>Fundraisers</h4>
+      {% for data in data %}
+      
+      {% if data.city == 'Mumbai' and data.category == "Fundraisers" %}
+      <div class='new_card' style="padding: 20px;word-wrap: break-word;">
+          <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+          <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+          {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+          {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+      </div>
+       <br>
+       {% endif %}
+       
+       {% endfor %}
+      </div>
+      
+
+
+
+
+   <!-- {% for data in data %}
+    {% if data.city == 'Mumbai' and data.category == 'Mental well being and Emotional Support' %}
+    <div class='new_card' style="padding: 20px;">
+        <p><span style="color: rgb(189, 255, 189);">Name of the organisation : </span><strong>{{data.nameoftheorganisation}}</strong></p>
+        <p><span style="color: rgb(189, 255, 189);">Service provided : </span>{{data.descriptionandorserviceprovided}}</p>
+        {% if data.phonenumber %}<p><span style="color: rgb(189, 255, 189);">Contact : </span>{{data.phonenumber}}</p>{% endif %}     
+        {% if data.contact %}<p><span style="color: rgb(189, 255, 189);">Link : </span>{{data.contact}}</p>{% endif %} 
+    </div>
+     <br>
+     {% endif %}
+     {% endfor %}-->
+
+</div>
+
+
+
+
+<script type="text/javascript">
+['Fundraisers', 'Free Food', 'Mental well being and Emotional Support', 'Accommodation and Shelter Homes', 'Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]','CoVID-19 Testing Lab'] 
+
+function category() {
+      if (document.getElementById('branches').value == 'Free Food') {
+        document.getElementById('Free Food').style.display = '';
+        document.getElementById('Mental well being and Emotional Support').style.display = 'none';
+        document.getElementById('Fundraisers').style.display = 'none';
+        document.getElementById('Accommodation and Shelter Homes').style.display = 'none';
+        document.getElementById('Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]').style.display = 'none';
+        document.getElementById('CoVID-19 Testing Lab').style.display = 'none';
+
+        
+      } 
+      else if(document.getElementById('branches').value == 'Mental well being and Emotional Support'){
+        document.getElementById('Free Food').style.display = 'none';
+        document.getElementById('Mental well being and Emotional Support').style.display = '';
+        document.getElementById('Fundraisers').style.display = 'none';
+        document.getElementById('Accommodation and Shelter Homes').style.display = 'none';
+        document.getElementById('Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]').style.display = 'none';
+        document.getElementById('CoVID-19 Testing Lab').style.display = 'none';
+      }
+      else if(document.getElementById('branches').value == 'Accommodation and Shelter Homes'){
+        document.getElementById('Free Food').style.display = 'none';
+        document.getElementById('Mental well being and Emotional Support').style.display = 'none';
+        document.getElementById('Fundraisers').style.display = 'none';
+        document.getElementById('Accommodation and Shelter Homes').style.display = '';
+        document.getElementById('Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]').style.display = 'none';
+        document.getElementById('CoVID-19 Testing Lab').style.display = 'none';
+      }
+      else if(document.getElementById('branches').value == 'Fundraisers'){
+        document.getElementById('Free Food').style.display = 'none';
+        document.getElementById('Mental well being and Emotional Support').style.display = 'none';
+        document.getElementById('Fundraisers').style.display = '';
+        document.getElementById('Accommodation and Shelter Homes').style.display = 'none';
+        document.getElementById('Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]').style.display = 'none';
+        document.getElementById('CoVID-19 Testing Lab').style.display = 'none';
+      }
+      else if(document.getElementById('branches').value == 'Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]'){
+        document.getElementById('Free Food').style.display = 'none';
+        document.getElementById('Mental well being and Emotional Support').style.display = 'none';
+        document.getElementById('Fundraisers').style.display = 'none';
+        document.getElementById('Accommodation and Shelter Homes').style.display = 'none';
+        document.getElementById('Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]').style.display = '';
+        document.getElementById('CoVID-19 Testing Lab').style.display = 'none';
+      }
+      
+      else if(document.getElementById('branches').value == 'CoVID-19 Testing Lab'){
+        document.getElementById('Free Food').style.display = 'none';
+        document.getElementById('Mental well being and Emotional Support').style.display = 'none';
+        document.getElementById('Fundraisers').style.display = 'none';
+        document.getElementById('Accommodation and Shelter Homes').style.display = 'none';
+        document.getElementById('Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]').style.display = 'none';
+        document.getElementById('CoVID-19 Testing Lab').style.display = '';
+      }
+
+
+}
+
+  /*  $(document).on('click','#essentialbutton',function(event){
+      event.preventDefault();
+      
+      var pk = $(this).attr('value');
+      console.log(pk);
+      
+      $.ajax({
+        type:'GET',
+        url:'{% url "essentials" %}',
+        data:{'category': pk,
+  
+        },
+        
+        
+        success:function(response){
+          alert("success")
+          ;
+        },
+        error:function(response){
+          alert("Error");
+        }
+  
+      });
+  
+    }); */
+  
+  
+  
+  </script>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}
+
+{% block style %}
+<style>
+ .btn:hover{
+     color: greenyellow;
+     
+
+
+
+}
+</style>
+{% endblock style %}
